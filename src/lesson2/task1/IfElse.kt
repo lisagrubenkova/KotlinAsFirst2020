@@ -3,8 +3,8 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -69,14 +69,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return if (age % 100 in 5..20) {
-        ("$age лет")
-    } else when {
-        age % 10 == 1 -> ("$age год")
-        age % 10 in 2..4 -> ("$age года")
-        else -> ("$age лет")
-    }
+fun ageDescription(age: Int) = when {
+    age % 100 in 5..20 -> "$age лет"
+    age % 10 == 1 -> "$age год"
+    age % 10 in 2..4 -> "$age года"
+    else -> "$age лет"
 }
 
 /**
@@ -119,7 +116,7 @@ fun whichRookThreatens(
     var result = 0
     if (kingX == rookX1 || kingY == rookY1) result += 1
     if (kingX == rookX2 || kingY == rookY2) result += 2
-    return (result)
+    return result
 }
 
 /**
@@ -139,9 +136,9 @@ fun rookOrBishopThreatens(
 ): Int {
     var result = 0
     if (kingX == rookX || kingY == rookY) result += 1
-    if (kotlin.math.abs(kingX - bishopX) == kotlin.math.abs(kingY - bishopY))
+    if (abs(kingX - bishopX) == abs(kingY - bishopY))
         result += 2
-    return (result)
+    return result
 }
 
 /**
@@ -162,12 +159,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return when {
-        (b - c < 0 || d - a < 0) -> -1
-        (a >= c && b <= d) -> b - a
-        (c > a && b > d) -> d - c
-        (b in c..d) -> b - c
-        else -> d - a
-    }
+fun segmentLength(a: Int, b: Int, c: Int, d: Int) = when {
+    b - c < 0 || d - a < 0 -> -1
+    a >= c && b <= d -> b - a
+    c > a && b > d -> d - c
+    b in c..d -> b - c
+    else -> d - a
 }
+
