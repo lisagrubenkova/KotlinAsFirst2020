@@ -80,7 +80,7 @@ fun digitNumber(n: Int): Int {
             digitCount++
             x /= 10
         }
-        (digitCount)
+        digitCount
     }
 }
 
@@ -93,15 +93,13 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int {
     var f1 = 1
     var f2 = 1
-    var fn = 0
-    return if (n == 1 || n == 2) 1 else {
-        for (i in 3..n) {
-            fn = f1 + f2
-            f1 = f2
-            f2 = fn
-        }
-        fn
+    var fn = 1
+    for (i in 3..n) {
+        fn = f1 + f2
+        f1 = f2
+        f2 = fn
     }
+    return fn
 }
 
 /**
