@@ -3,7 +3,9 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 4: списки
 // Максимальное количество баллов = 12
@@ -120,14 +122,14 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double = sqrt((v.map { it * it }).sum())
 
 /**
  * Простая (2 балла)
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else (list.sum() / (list.size).toDouble())
 
 /**
  * Средняя (3 балла)
@@ -137,7 +139,15 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    return if (list.size == 0) list else {
+        val average = list.sum() / (list.size).toDouble()
+        for ((index, element) in list.withIndex()) {
+            list[index] = element - average
+        }
+        list
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -146,17 +156,34 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int {
+    return if (a.isEmpty()) 0 else {
+        var product = 0
+        for (i in 0 until a.size) {
+            product += a[i] * b[i]
+        }
+        product
+    }
+}
 
 /**
  * Средняя (3 балла)
  *
  * Рассчитать значение многочлена при заданном x:
- * p(x) = p0 + p1*x + p2*x^2 + p3*x^3 + ... + pN*x^N.
+ * p(x) = p0 + p1*x + p2*x^2   + p3*x^3 + ... + pN*x^N.
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int {
+    return if (p.isEmpty()) 0 else {
+        var result = 0.0
+        val n = x.toDouble()
+        for (i in 0 until p.size) {
+            result += p[i] * n.pow(i)
+        }
+        result.toInt()
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -186,7 +213,20 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    val list = mutableListOf<Int>()
+    var x = n
+    if (x < 4) list.add(x) else {
+        for (i in 2..sqrt(n.toDouble()).toInt() + 1) {
+            while ((x % i == 0) && (x > 0)) {
+                list.add(i)
+                x /= i
+            }
+        }
+    }
+    if (list.isEmpty()) list.add(n)
+    return list.joinToString(separator = "*")
+}
 
 /**
  * Средняя (3 балла)
@@ -196,7 +236,6 @@ fun factorizeToString(n: Int): String = TODO()
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> = TODO()
-
 /**
  * Сложная (4 балла)
  *
@@ -241,7 +280,89 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var result = ""
+    var digit = ""
+    var x = n
+    var k = x % 10
+    when (k) {
+        0 -> digit = ""
+        in 1..3 -> {
+            digit = "I"
+            while (k != 1) {
+                digit += "I"
+                k -= 1
+            }
+        }
+        4 -> digit = "IV"
+        in 5..8 -> {
+            digit = "V"
+            while (k != 5) {
+                digit += "I"
+                k -= 1
+            }
+        }
+        9 -> digit = "IX"
+    }
+    result = digit + result
+    x /= 10
+    k = x % 10
+    when (k) {
+        0 -> digit = ""
+        in 1..3 -> {
+            digit = "X"
+            while (k != 1) {
+                digit += "X"
+                k -= 1
+            }
+        }
+        4 -> digit = "XL"
+        in 5..8 -> {
+            digit = "L"
+            while (k != 5) {
+                digit += "X"
+                k -= 1
+            }
+        }
+        9 -> digit = "XC"
+    }
+    result = digit + result
+    x /= 10
+    k = x % 10
+    when (k) {
+        0 -> digit = ""
+        in 1..3 -> {
+            digit = "C"
+            while (k != 1) {
+                digit += "C"
+                k -= 1
+            }
+        }
+        4 -> digit = "CD"
+        in 5..8 -> {
+            digit = "D"
+            while (k != 5) {
+                digit += "C"
+                k -= 1
+            }
+        }
+        9 -> digit = "CM"
+    }
+    result = digit + result
+    x /= 10
+    k = x % 10
+    when (k) {
+        0 -> digit = ""
+        in 1..3 -> {
+            digit = "M"
+            while (k != 1) {
+                digit += "M"
+                k -= 1
+            }
+        }
+    }
+    return (digit + result)
+}
 
 /**
  * Очень сложная (7 баллов)
