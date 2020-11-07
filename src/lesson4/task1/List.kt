@@ -217,14 +217,13 @@ fun factorizeToString(n: Int): String {
     val list = mutableListOf<Int>()
     var x = n
     if (x < 4) list.add(x) else {
-        for (i in 2..sqrt(n.toDouble()).toInt() + 1) {
+        for (i in 2..n) {
             while ((x % i == 0) && (x > 0)) {
                 list.add(i)
                 x /= i
             }
         }
     }
-    if (list.isEmpty()) list.add(n)
     return list.joinToString(separator = "*")
 }
 
