@@ -4,7 +4,6 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
-import kotlin.math.sqrt
 import kotlin.math.*
 
 // Урок 4: списки
@@ -140,13 +139,11 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else (list.sum() 
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    return if (list.size == 0) list else {
-        val average = list.sum() / (list.size).toDouble()
-        for ((index, element) in list.withIndex()) {
-            list[index] = element - average
-        }
-        list
+    val average = list.sum() / (list.size).toDouble()
+    for ((index, element) in list.withIndex()) {
+        list[index] = element - average
     }
+    return list
 }
 
 /**
@@ -157,13 +154,11 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    return if (a.isEmpty()) 0 else {
-        var product = 0
-        for (i in 0 until a.size) {
-            product += a[i] * b[i]
-        }
-        product
+    var product = 0
+    for (i in a.indices) {
+        product += a[i] * b[i]
     }
+    return product
 }
 
 /**
@@ -175,14 +170,13 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    return if (p.isEmpty()) 0 else {
-        var result = 0.0
-        val n = x.toDouble()
-        for (i in 0 until p.size) {
-            result += p[i] * n.pow(i)
-        }
-        result.toInt()
+    var result = 0
+    var n = 1
+    for (element in p) {
+        result += element * n
+        n *= x
     }
+    return result
 }
 
 /**
@@ -216,12 +210,10 @@ fun factorize(n: Int): List<Int> = TODO()
 fun factorizeToString(n: Int): String {
     val list = mutableListOf<Int>()
     var x = n
-    if (x < 4) list.add(x) else {
-        for (i in 2..n) {
-            while ((x % i == 0) && (x > 0)) {
-                list.add(i)
-                x /= i
-            }
+    for (i in 2..n) {
+        while ((x % i == 0) && (x > 0)) {
+            list.add(i)
+            x /= i
         }
     }
     return list.joinToString(separator = "*")
@@ -235,6 +227,7 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> = TODO()
+
 /**
  * Сложная (4 балла)
  *
@@ -280,87 +273,11 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    var result = ""
-    var digit = ""
-    var x = n
-    var k = x % 10
-    when (k) {
-        0 -> digit = ""
-        in 1..3 -> {
-            digit = "I"
-            while (k != 1) {
-                digit += "I"
-                k -= 1
-            }
-        }
-        4 -> digit = "IV"
-        in 5..8 -> {
-            digit = "V"
-            while (k != 5) {
-                digit += "I"
-                k -= 1
-            }
-        }
-        9 -> digit = "IX"
-    }
-    result = digit + result
-    x /= 10
-    k = x % 10
-    when (k) {
-        0 -> digit = ""
-        in 1..3 -> {
-            digit = "X"
-            while (k != 1) {
-                digit += "X"
-                k -= 1
-            }
-        }
-        4 -> digit = "XL"
-        in 5..8 -> {
-            digit = "L"
-            while (k != 5) {
-                digit += "X"
-                k -= 1
-            }
-        }
-        9 -> digit = "XC"
-    }
-    result = digit + result
-    x /= 10
-    k = x % 10
-    when (k) {
-        0 -> digit = ""
-        in 1..3 -> {
-            digit = "C"
-            while (k != 1) {
-                digit += "C"
-                k -= 1
-            }
-        }
-        4 -> digit = "CD"
-        in 5..8 -> {
-            digit = "D"
-            while (k != 5) {
-                digit += "C"
-                k -= 1
-            }
-        }
-        9 -> digit = "CM"
-    }
-    result = digit + result
-    x /= 10
-    k = x % 10
-    when (k) {
-        0 -> digit = ""
-        in 1..3 -> {
-            digit = "M"
-            while (k != 1) {
-                digit += "M"
-                k -= 1
-            }
-        }
-    }
-    return (digit + result)
+    val firstDigit = listOf<String>("", "M", "MM", "MMM", "MMMM")
+    val secondDigit = listOf<String>("", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
+    val thirdDigit = listOf<String>("", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
+    val fourthDigit = listOf<String>("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
+    return (firstDigit[n / 1000] + secondDigit[n / 100 % 10] + thirdDigit[n / 10 % 10] + fourthDigit[n % 10])
 }
 
 /**
