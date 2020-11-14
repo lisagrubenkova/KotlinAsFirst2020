@@ -96,7 +96,17 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val studentGrades = mutableMapOf<Int, MutableList<String>>()
+    for ((name, grade) in grades) {
+        if (studentGrades[grade] == null) {
+            studentGrades[grade] = mutableListOf(name)
+        } else {
+            studentGrades[grade]?.add(name)
+        }
+    }
+    return studentGrades
+}
 
 /**
  * Простая (2 балла)
@@ -108,7 +118,12 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for ((a1, a2) in a) {
+        if (a[a1] != b[a1]) return false
+    }
+    return true
+}
 
 /**
  * Простая (2 балла)
@@ -154,7 +169,18 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val phoneBook = mutableMapOf<String, String>()
+    phoneBook.putAll(mapA)
+    for ((b1, b2) in mapB) {
+        if ((b1 in phoneBook) && (mapB[b1] != phoneBook[b1])) {
+            phoneBook[b1] = phoneBook[b1] + ", " + mapB[b1]
+        } else if (b1 !in phoneBook) {
+            phoneBook[b1] = b2
+        }
+    }
+    return phoneBook
+}
 
 /**
  * Средняя (4 балла)
