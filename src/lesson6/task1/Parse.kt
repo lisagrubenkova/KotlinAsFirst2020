@@ -138,7 +138,23 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val elements = expression.split(" ")
+    var i = 1
+    if (elements[0].contains(Regex("""[+-]"""))) throw IllegalArgumentException()
+    var currentResult = elements[0].toInt()
+    while (i < elements.size - 1) {
+        if ((elements[i + 1].contains(Regex("""[+-]"""))) || elements[i].contains(Regex("""[0123456789]""")))
+            throw IllegalArgumentException()
+        if (elements[i] == "+") {
+            currentResult += elements[i + 1].toInt()
+        } else if (elements[i] == "-") {
+            currentResult -= elements[i + 1].toInt()
+        }
+        i += 2
+    }
+    return currentResult
+}
 
 /**
  * Сложная (6 баллов)
@@ -162,7 +178,30 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    var max = 0.0
+    var result = ""
+    var goodsPrices: MutableMap<String, Double> = mutableMapOf()
+    if (description == "") return result else {
+        val goods = description.split("; ")
+        try {
+            for (i in 0..goods.size - 1) {
+                val goodToPrice = goods[i].split(" ")
+                goodsPrices[goodToPrice[0]] = goodToPrice[1].toDouble()
+            }
+        } catch (e: Exception) {
+            return ""
+        }
+        for ((key, value) in goodsPrices) {
+            if (value > max) {
+                max = value
+                result = key
+            }
+        }
+    }
+    return result
+
+}
 
 /**
  * Сложная (6 баллов)
