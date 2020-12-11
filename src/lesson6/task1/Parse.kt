@@ -185,8 +185,8 @@ fun mostExpensive(description: String): String {
     if (description == "") return result else {
         val goods = description.split("; ")
         try {
-            for (i in 0..goods.size - 1) {
-                val goodToPrice = goods[i].split(" ")
+            for (element in goods) {
+                val goodToPrice = element.split(" ")
                 goodsPrices[goodToPrice[0]] = goodToPrice[1].toDouble()
             }
         } catch (e: Exception) {

@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import javax.print.attribute.IntegerSyntax
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -99,11 +101,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val studentGrades = mutableMapOf<Int, MutableList<String>>()
     for ((name, grade) in grades) {
-        if (studentGrades[grade] == null) {
-            studentGrades[grade] = mutableListOf(name)
-        } else {
-            studentGrades[grade]?.add(name)
-        }
+        studentGrades.getOrPut(grade) { mutableListOf() }.add(name)
     }
     return studentGrades
 }
@@ -120,7 +118,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((a1, a2) in a) {
-        if (a[a1] != b[a1]) return false
+        if (a2 != b[a1]) return false
     }
     return true
 }
@@ -140,7 +138,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    TODO()
+    for ((b1, b2) in b) {
+        if (a[b1] == b2) a.remove(b1)
+    }
 }
 
 /**
@@ -173,8 +173,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
     val phoneBook = mutableMapOf<String, String>()
     phoneBook.putAll(mapA)
     for ((b1, b2) in mapB) {
-        if ((b1 in phoneBook) && (mapB[b1] != phoneBook[b1])) {
-            phoneBook[b1] = phoneBook[b1] + ", " + mapB[b1]
+        if (b1 in phoneBook && b2 != phoneBook[b1]) {
+            phoneBook[b1] = phoneBook[b1] + ", " + b2
         } else if (b1 !in phoneBook) {
             phoneBook[b1] = b2
         }
@@ -192,7 +192,25 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    var result: MutableMap<String, Double> = mutableMapOf()
+    var names: MutableList<String> = mutableListOf()
+    for (i in stockPrices.indices) {
+        if (!names.contains(stockPrices[i].first)) names.add(stockPrices[i].first)
+    }
+    for (i in names.indices) {
+        var average = 0.0
+        var count = 0
+        for (j in stockPrices.indices) {
+            if (names[i] == stockPrices[j].first) {
+                average += stockPrices[j].second
+                count++
+            }
+            result[names[i]] = average / count
+        }
+    }
+    return result
+}
 
 /**
  * Средняя (4 балла)
@@ -285,6 +303,20 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *        )
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+//{
+//    var result: MutableMap<String, Set<String>> = mutableMapOf()
+//    result.putAll(friends)
+//    for ((key, value) in result) {
+//        var set: MutableSet<String> = mutableSetOf()
+//        set.addAll(value)
+//        for (name in value) {
+//            set.union(result.getOrPut(name) { setOf() })
+//        }
+//        if (set.contains(key)) set.remove(key)
+//        result[key] = set
+//    }
+//    return result
+//} чета не вышло(((
 
 /**
  * Сложная (6 баллов)
@@ -303,7 +335,21 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    return if (list.isEmpty()) (Pair(-1, -1)) else {
+        val map = mutableMapOf<Int, Int>()
+        for (i in list.indices) {
+            map[list[i]] = i
+        }
+        for ((key, value) in map) {
+            var element = number - key
+            if (element in list && value != list.indexOf(element)) {
+                return (Pair(value, list.indexOf(element)))
+            }
+        }
+        (Pair(-1, -1))
+    }
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -327,3 +373,13 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+//{
+//    val result = setOf<String>()
+//    for ((key, value) in treasures) {
+//        while (capacity > 0) {
+//            if (treasures[key]?.first!! <= capacity) {
+//
+//            }
+//        }
+//    }
+//}
