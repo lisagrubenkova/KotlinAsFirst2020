@@ -179,8 +179,8 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть больше нуля либо равны нулю.
  */
 fun mostExpensive(description: String): String {
-    var max = 0.0
-    var result = "Any good with price 0.0"
+    var max = -1.0
+    var result = ""
     var goodsPrices: MutableMap<String, Double> = mutableMapOf()
     if (description == "") return "" else {
         val goods = description.split("; ")
@@ -199,7 +199,7 @@ fun mostExpensive(description: String): String {
             }
         }
     }
-    return result
+    return if (max == 0.0) "Any good with price 0.0" else result
 
 }
 
