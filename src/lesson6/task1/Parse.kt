@@ -182,7 +182,7 @@ fun mostExpensive(description: String): String {
     var max = -1.0
     var result = ""
     var goodsPrices: MutableMap<String, Double> = mutableMapOf()
-    if (description == "") return "" else {
+    if (description == "") return result else {
         val goods = description.split("; ")
         try {
             for (element in goods) {
@@ -199,7 +199,8 @@ fun mostExpensive(description: String): String {
             }
         }
     }
-    return if (max == 0.0) "Any good with price 0.0" else result
+    if (max == 0.0) result = "Any good with price 0.0"
+    return result
 
 }
 
