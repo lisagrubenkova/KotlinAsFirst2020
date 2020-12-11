@@ -180,7 +180,7 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  */
 fun mostExpensive(description: String): String {
     var max = 0.0
-    var result = ""
+    var result = "Any good with price 0.0"
     var goodsPrices: MutableMap<String, Double> = mutableMapOf()
     if (description == "") return result else {
         val goods = description.split("; ")
