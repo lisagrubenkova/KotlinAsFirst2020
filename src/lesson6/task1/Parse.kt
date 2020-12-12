@@ -141,10 +141,10 @@ fun bestHighJump(jumps: String): Int = TODO()
 fun plusMinus(expression: String): Int {
     val elements = expression.split(" ")
     var i = 1
-    if (elements[0].contains(Regex("""[+-]"""))) throw IllegalArgumentException()
+    if (elements[0].contains(Regex("""[^0123456789]"""))) throw IllegalArgumentException()
     var currentResult = elements[0].toInt()
     while (i < elements.size - 1) {
-        if ((elements[i + 1].contains(Regex("""[+-]"""))) || elements[i].contains(Regex("""[0123456789]""")))
+        if ((elements[i + 1].contains(Regex("""[^0123456789]"""))) || elements[i].contains(Regex("""[^+-]""")))
             throw IllegalArgumentException()
         if (elements[i] == "+") {
             currentResult += elements[i + 1].toInt()
@@ -181,16 +181,15 @@ fun firstDuplicateIndex(str: String): Int = TODO()
 fun mostExpensive(description: String): String {
     var max = -1.0
     var result = ""
-    var goodsPrices: MutableMap<String, Double> = mutableMapOf()
+    val goodsPrices = mutableMapOf<String, Double>()
     if (description == "") return result else {
         val goods = description.split("; ")
-        try {
-            for (element in goods) {
-                val goodToPrice = element.split(" ")
+        for (element in goods) {
+            val goodToPrice = element.split(" ")
+            if (goodToPrice[0].contains(Regex("""[^а-я|^А-Я]""")) || goodToPrice[1].contains(Regex("""[^0123456789|^.]"""))) {
+                return result
+            } else
                 goodsPrices[goodToPrice[0]] = goodToPrice[1].toDouble()
-            }
-        } catch (e: Exception) {
-            return ""
         }
         for ((key, value) in goodsPrices) {
             if (value > max) {
@@ -199,7 +198,6 @@ fun mostExpensive(description: String): String {
             }
         }
     }
-    if (max == 0.0) result = "Any good with price 0.0"
     return result
 
 }

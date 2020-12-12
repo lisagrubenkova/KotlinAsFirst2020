@@ -193,21 +193,20 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    var result: MutableMap<String, Double> = mutableMapOf()
-    var names: MutableList<String> = mutableListOf()
+    val result: MutableMap<String, Double> = mutableMapOf()
+    val count: MutableMap<String, Int> = mutableMapOf()
     for (i in stockPrices.indices) {
-        if (!names.contains(stockPrices[i].first)) names.add(stockPrices[i].first)
+        if (!result.containsKey(stockPrices[i].first))
+            result[stockPrices[i].first] = 0.0
+        if (!count.containsKey(stockPrices[i].first))
+            count[stockPrices[i].first] = 0
     }
-    for (i in names.indices) {
-        var average = 0.0
-        var count = 0
-        for (j in stockPrices.indices) {
-            if (names[i] == stockPrices[j].first) {
-                average += stockPrices[j].second
-                count++
-            }
-            result[names[i]] = average / count
-        }
+    for (i in stockPrices.indices) {
+        result[stockPrices[i].first] = result[stockPrices[i].first]!! + stockPrices[i].second
+        count[stockPrices[i].first] = count[stockPrices[i].first]!! + 1
+    }
+    for ((key) in result) {
+        result[key] = result[key]!! / count[key]!!
     }
     return result
 }
@@ -338,13 +337,15 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     return if (list.isEmpty()) (Pair(-1, -1)) else {
         val map = mutableMapOf<Int, Int>()
+        val map2 = mutableMapOf<Int, Int>()
         for (i in list.indices) {
             map[list[i]] = i
+            map2[list[i]] = i
         }
         for ((key, value) in map) {
-            var element = number - key
-            if (element in list && value != list.indexOf(element)) {
-                return (Pair(value, list.indexOf(element)))
+            val element = number - key
+            if (element in list && value != map2[element]) {
+                return (Pair(value, map2[element]!!))
             }
         }
         (Pair(-1, -1))
