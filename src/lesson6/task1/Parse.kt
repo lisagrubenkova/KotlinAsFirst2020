@@ -139,17 +139,19 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
+    if (expression.contains(Regex("""[^\d|\-+\s]"""))) throw IllegalArgumentException()
     val elements = expression.split(" ")
     var i = 1
-    if (elements[0].contains(Regex("""[^0123456789]"""))) throw IllegalArgumentException()
+    if (elements[0].contains(Regex("""[^\d]"""))) throw IllegalArgumentException()
     var currentResult = elements[0].toInt()
     while (i < elements.size - 1) {
-        if ((elements[i + 1].contains(Regex("""[^0123456789]"""))) || elements[i].contains(Regex("""[^+-]""")))
-            throw IllegalArgumentException()
-        if (elements[i] == "+") {
-            currentResult += elements[i + 1].toInt()
-        } else if (elements[i] == "-") {
-            currentResult -= elements[i + 1].toInt()
+        if (elements[i + 1].contains(Regex("""[^\d]""")) || elements[i].contains(Regex("""[^+-]""")))
+            throw IllegalArgumentException() else {
+            if (elements[i] == "+") {
+                currentResult += elements[i + 1].toInt()
+            } else if (elements[i] == "-") {
+                currentResult -= elements[i + 1].toInt()
+            }
         }
         i += 2
     }
@@ -181,18 +183,18 @@ fun firstDuplicateIndex(str: String): Int = TODO()
 fun mostExpensive(description: String): String {
     var max = -1.0
     var result = ""
-    val goodsPrices = mutableMapOf<String, Double>()
-    if (description == "") return result else {
+    val goodsPrices = mutableMapOf<String, Double?>()
+    if (description == "") return "" else {
         val goods = description.split("; ")
         for (element in goods) {
             val goodToPrice = element.split(" ")
-            if (goodToPrice[0].contains(Regex("""[^а-я|^А-Я]""")) || goodToPrice[1].contains(Regex("""[^0123456789|^.]"""))) {
-                return result
-            } else
-                goodsPrices[goodToPrice[0]] = goodToPrice[1].toDouble()
+//            if (goodToPrice.size == 1 || goodToPrice[1].contains(Regex("""[^/d|\.]"""))) {
+//                return ""
+//            } else
+            goodsPrices[goodToPrice[0]] = goodToPrice[1].toDoubleOrNull() ?: return ""
         }
         for ((key, value) in goodsPrices) {
-            if (value > max) {
+            if (value!! > max) {
                 max = value
                 result = key
             }

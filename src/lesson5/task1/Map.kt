@@ -196,17 +196,11 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val result = mutableMapOf<String, Double>()
     val count = mutableMapOf<String, Int>()
     for (i in stockPrices.indices) {
-        if (!result.containsKey(stockPrices[i].first))
-            result[stockPrices[i].first] = 0.0
-        if (!count.containsKey(stockPrices[i].first))
-            count[stockPrices[i].first] = 0
+        result[stockPrices[i].first] = (result[stockPrices[i].first] ?: 0.0) + stockPrices[i].second
+        count[stockPrices[i].first] = (count[stockPrices[i].first] ?: 0) + 1
     }
-    for (i in stockPrices.indices) {
-        result[stockPrices[i].first] = result[stockPrices[i].first]!! + stockPrices[i].second
-        count[stockPrices[i].first] = count[stockPrices[i].first]!! + 1
-    }
-    for ((key) in result) {
-        result[key] = result[key]!! / count[key]!!
+    for ((key, value) in result) {
+        result[key] = value / count[key]!!
     }
     return result
 }
@@ -340,12 +334,11 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
         val map2 = mutableMapOf<Int, Int>()
         for (i in list.indices) {
             map[list[i]] = i
-            map2[list[i]] = i
         }
-        for ((key, value) in map) {
-            val element = number - key
-            if (element in list && value != map2[element]) {
-                return (Pair(value, map2[element]!!))
+        for (i in list.indices) {
+            val element = number - list[i]
+            if (element in list && i != map[element]) {
+                return (Pair(i, map[element]!!))
             }
         }
         (Pair(-1, -1))
