@@ -193,8 +193,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
-    val result: MutableMap<String, Double> = mutableMapOf()
-    val count: MutableMap<String, Int> = mutableMapOf()
+    val result = mutableMapOf<String, Double>()
+    val count = mutableMapOf<String, Int>()
     for (i in stockPrices.indices) {
         if (!result.containsKey(stockPrices[i].first))
             result[stockPrices[i].first] = 0.0
