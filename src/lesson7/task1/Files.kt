@@ -85,15 +85,18 @@ fun deleteMarked(inputName: String, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-//    var result: MutableMap<String, Int> = mutableMapOf()
-//    for (line in File(inputName).readLines()) {
-//        for (element in substrings)
-//            while (line.contains(element.toRegex())) {
-//               result[element] =
-//            }
-//    }
-//    return result
-    TODO()
+    val result: MutableMap<String, Int> = mutableMapOf()
+    for (line in File(inputName).readLines()) {
+        for (element in substrings) {
+            var mainString = line.toLowerCase()
+            result.getOrPut(element) { 0 }
+            while (mainString.contains(element.toLowerCase())){
+                mainString = mainString.substring(mainString.indexOf(element.toLowerCase()) + 1)
+                result[element] = result[element]!! + 1
+            }
+        }
+    }
+    return result
 }
 
 
@@ -134,23 +137,19 @@ fun sibilants(inputName: String, outputName: String) {
 fun centerFile(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     var max = 0
-    val lines = mutableListOf<String>()
     for (line in File(inputName).readLines()) {
-        lines.add(line)
         if (line.trim().length > max)
             max = line.trim().length
     }
-    if (lines.size == 1) writer.write(lines[0].trim()) else {
-        for (line in lines) {
-            var center = max / 2
-            center += if (line.trim().length % 2 == 0) {
-                line.trim().length / 2
-            } else {
-                (line.trim().length + 1) / 2
-            }
-            writer.write(line.trim().padStart(center))
-            writer.newLine()
+    for (line in File(inputName).readLines()) {
+        var center = max / 2
+        center += if (line.trim().length % 2 == 0) {
+            line.trim().length / 2
+        } else {
+            (line.trim().length + 1) / 2
         }
+        writer.write(line.trim().padStart(center))
+        writer.newLine()
     }
     writer.close()
 }
