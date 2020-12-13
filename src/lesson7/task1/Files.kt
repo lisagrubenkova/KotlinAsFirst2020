@@ -145,7 +145,8 @@ fun centerFile(inputName: String, outputName: String) {
         } else {
             (line.trim().length + 1) / 2
         }
-        writer.write(line.trim().padStart(center))
+        val spaces = max - center
+        writer.write(line.trim().padStart(center) + "".padStart(spaces))
         writer.newLine()
     }
     writer.close()
