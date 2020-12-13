@@ -89,7 +89,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
 //    for (line in File(inputName).readLines()) {
 //        for (element in substrings)
 //            while (line.contains(element.toRegex())) {
-//
+//               result[element] =
 //            }
 //    }
 //    return result
