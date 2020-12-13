@@ -90,7 +90,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         for (element in substrings) {
             var mainString = line.toLowerCase()
             result.getOrPut(element) { 0 }
-            while (mainString.contains(element.toLowerCase())){
+            while (mainString.contains(element.toLowerCase())) {
                 mainString = mainString.substring(mainString.indexOf(element.toLowerCase()) + 1)
                 result[element] = result[element]!! + 1
             }
@@ -148,7 +148,7 @@ fun centerFile(inputName: String, outputName: String) {
         } else {
             (line.trim().length + 1) / 2
         }
-        writer.write(line.trim().padStart(center))
+        writer.write(line.padStart(center))
         writer.newLine()
     }
     writer.close()
