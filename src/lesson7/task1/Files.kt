@@ -148,7 +148,7 @@ fun centerFile(inputName: String, outputName: String) {
         } else {
             (line.trim().length + 1) / 2
         }
-        writer.write(line.padStart(center))
+        writer.write(line.trim().padStart(center))
         writer.newLine()
     }
     writer.close()
